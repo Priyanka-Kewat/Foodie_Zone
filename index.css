@@ -1,0 +1,55 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.Header-Top {
+  border: 1px solid black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem 0 0;
+  box-shadow: 2px 0px 10px black;
+}
+
+.Menus {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  list-style: none;
+}
+
+.rest-logo {
+  width: 7rem;
+  height: 4rem;
+}
+
+.res-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.restaurant-images {
+  height: 300px;
+}
+
+.containerBox:hover {
+  transform: scale(0.9);
+}
+
+.Filter-Rating,
+.Filter-Veg,
+.Filter-Chinese,
+.Filter-Biryani {
+  padding: 0.5rem 0.3rem;
+  margin: 0.5rem 0.5rem;
+}
+
+.Filter-Rating:hover,
+.Filter-Veg:hover,
+.Filter-Chinese:hover,
+.Filter-Biryani:hover {
+  color: orange;
+}
