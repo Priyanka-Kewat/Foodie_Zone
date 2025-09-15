@@ -1,9 +1,14 @@
-import { restList } from "../util/mockData";
+// import { restList } from "../util/mockData";
 import Restaurants_Cards from "./RestaurentsCards";
 import { useState, useEffect } from "react";
+import RestaurantsSkeletons from "./CardsSkeleton";
+import { RestCards_Home_Api } from "../util/constants";
 
 const RestaurantsHome = () => {
   const [listOfRestaurants, setListOfRestaurants] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [filterRestaurant, setFilterRestaurant] = useState();
+  const [searchText, setSearchText] = useState("");
 
   const HigherRatingRestaurant = () => {
     console.log("button clicked");
@@ -42,17 +47,22 @@ const RestaurantsHome = () => {
     setListOfRestaurants(filteredBiryani);
   };
 
-  const RestCards_Home_Api =
-    "https://www.swiggy.com/dapi/restaurants/list/v5?lat=17.433546&lng=78.41905729999999&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING";
-
   const getRestaurantsData = async () => {
-    const data = await fetch(RestCards_Home_Api);
-    const json = await data.json();
+    try {
+      setLoading(true);
+      const data = await fetch(RestCards_Home_Api);
+      const json = await data.json();
 
-    const restaurants =
-      json?.data?.cards?.[4]?.card?.card?.gridElements?.infoWithStyle
-        ?.restaurants;
-    setListOfRestaurants(restaurants);
+      const restaurants = json?.data?.cards?.find(
+        (item) => item?.card?.card?.id === "restaurant_grid_listing_v2"
+      )?.card?.card?.gridElements?.infoWithStyle?.restaurants;
+      setListOfRestaurants(restaurants);
+      setFilterRestaurant(restaurants);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -60,34 +70,69 @@ const RestaurantsHome = () => {
     getRestaurantsData();
   }, []);
 
+  const searchRestaurant = () => {
+    const filteredRest = listOfRestaurants?.filter((restaurant) =>
+      restaurant?.info?.name?.toLowerCase()?.includes(searchText?.toLowerCase())
+    );
+    setFilterRestaurant(filteredRest);
+  };
   return (
-    <div>
-      <div className="Filters-Box">
-        <h2 className="fil-labels">
-          Restaurants with online food delivery in Hyderabad
-        </h2>
-        <div>
-          <button onClick={HigherRatingRestaurant} className="Filter-Rating">
-            Higher Restaurant Rating
-          </button>
-          <button onClick={PureVeg} className="Filter-Veg">
-            Veg
-          </button>
-          <button onClick={ChineseFood} className="Filter-Chinese">
-            Chinese
-          </button>
-          <button onClick={HydBiryani} className="Filter-Biryani">
-            Hyderabadi Biryani
-          </button>
+    <>
+      {loading ? (
+        <div className="restaurant-skelton-body">
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]?.map((item) => (
+            <RestaurantsSkeletons key={item} />
+          ))}
         </div>
-      </div>
+      ) : (
+        <div>
+          <div className="Filters-Box">
+            <h2 className="fil-labels">
+              Restaurants with online food delivery in Hyderabad
+            </h2>
+            <div>
+              <input
+                type="text"
+                className="Search-ipnut"
+                placeholder="Search Restaurents"
+                value={searchText}
+                onChange={(e) => {
+                  console.log(e);
+                  setSearchText(e?.target?.value);
+                }}
+              />
+              <button className="Search-btn" onClick={searchRestaurant}>
+                Search
+              </button>
+              <button
+                onClick={HigherRatingRestaurant}
+                className="Filter-Rating"
+              >
+                Higher Restaurant Rating
+              </button>
+              <button onClick={PureVeg} className="Filter-Veg">
+                Veg
+              </button>
+              <button onClick={ChineseFood} className="Filter-Chinese">
+                Chinese
+              </button>
+              <button onClick={HydBiryani} className="Filter-Biryani">
+                Hyderabadi Biryani
+              </button>
+            </div>
+          </div>
 
-      <div className="res-container">
-        {listOfRestaurants?.map((restaurant, idx) => (
-          <Restaurants_Cards key={restaurant?.info?.id} resObj={restaurant} />
-        ))}
-      </div>
-    </div>
+          <div className="res-container">
+            {filterRestaurant?.map((restaurant, idx) => (
+              <Restaurants_Cards
+                key={restaurant?.info?.id}
+                resObj={restaurant}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
