@@ -1,4 +1,6 @@
 import { LOGO } from "../util/constants";
+import { Link } from "react-router";
+import React from "react";
 
 const Header = () => {
   return (
@@ -8,10 +10,18 @@ const Header = () => {
       </div>
       <div>
         <ul className="Menus">
-          <li>Home</li>
-          <li>About</li>
-          <li>Contact US</li>
-          <li>Cart</li>
+          <li>
+            <Link>Home</Link>
+          </li>
+          <li>
+            <Link>About</Link>
+          </li>
+          <li>
+            <Link>Contact US</Link>
+          </li>
+          <li>
+            <Link>Cart</Link>
+          </li>
         </ul>
       </div>
     </div>

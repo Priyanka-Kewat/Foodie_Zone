@@ -10,43 +10,6 @@ const RestaurantsHome = () => {
   const [filterRestaurant, setFilterRestaurant] = useState();
   const [searchText, setSearchText] = useState("");
 
-  const HigherRatingRestaurant = () => {
-    console.log("button clicked");
-
-    const filteredRestaurants = listOfRestaurants?.filter(
-      (resturant) => resturant?.info?.avgRating > 4.2
-    );
-    console.log(filteredRestaurants);
-    setListOfRestaurants(filteredRestaurants);
-  };
-
-  const PureVeg = () => {
-    console.log("veg opt");
-
-    const filterdVeg = listOfRestaurants?.filter(
-      (vegies) => vegies?.info?.veg === true
-    );
-    setListOfRestaurants(filterdVeg);
-  };
-
-  const ChineseFood = () => {
-    console.log("filter chinese");
-
-    const filteredChinese = listOfRestaurants?.filter((Chine) =>
-      Chine?.info?.cuisines.includes("Chinese")
-    );
-
-    setListOfRestaurants(filteredChinese);
-  };
-
-  const HydBiryani = () => {
-    console.log("Filter biryani");
-    const filteredBiryani = listOfRestaurants?.filter((biryani) =>
-      biryani?.info?.cuisines.includes("Biryani")
-    );
-    setListOfRestaurants(filteredBiryani);
-  };
-
   const getRestaurantsData = async () => {
     try {
       setLoading(true);
@@ -70,12 +33,49 @@ const RestaurantsHome = () => {
     getRestaurantsData();
   }, []);
 
+  const HigherRatingRestaurant = () => {
+    console.log("button clicked");
+
+    const filteredRestaurants = listOfRestaurants?.filter(
+      (resturant) => resturant?.info?.avgRating > 4.2
+    );
+    console.log(filteredRestaurants);
+    setFilterRestaurant(filteredRestaurants);
+  };
+
   const searchRestaurant = () => {
     const filteredRest = listOfRestaurants?.filter((restaurant) =>
       restaurant?.info?.name?.toLowerCase()?.includes(searchText?.toLowerCase())
     );
     setFilterRestaurant(filteredRest);
   };
+
+  const PureVeg = () => {
+    console.log("veg opt");
+
+    const filterdVeg = listOfRestaurants?.filter(
+      (vegies) => vegies?.info?.veg === true
+    );
+    setFilterRestaurant(filterdVeg);
+  };
+
+  const ChineseFood = () => {
+    console.log("filter chinese");
+
+    const filteredChinese = listOfRestaurants?.filter((Chine) =>
+      Chine?.info?.cuisines.includes("Chinese")
+    );
+    setFilterRestaurant(filteredChinese);
+  };
+
+  const HydBiryani = () => {
+    console.log("Filter biryani");
+    const filteredBiryani = listOfRestaurants?.filter((biryani) =>
+      biryani?.info?.cuisines.includes("Biryani")
+    );
+    setFilterRestaurant(filteredBiryani);
+  };
+
   return (
     <>
       {loading ? (
